@@ -115,7 +115,6 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     if (req.query.to) {
       dateTo = new Date(req.query.to);
     }
-    //console.log(new Date(dateTo))
     result[0].log = result[0].log.filter((entry) => {
       return new Date(entry.date) >= dateFrom && new Date(entry.date)<= dateTo;
     })
@@ -130,10 +129,6 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   res.send(result[0]);
 });
 
-
-/*
-- You can add from, to and limit parameters to a GET /api/users/:_id/logs request to retrieve part of the log of any user. from and to are dates in yyyy-mm-dd format. limit is an integer of how many logs to send back.
-*/
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
