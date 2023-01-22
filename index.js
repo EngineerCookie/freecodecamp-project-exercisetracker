@@ -65,7 +65,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 app.post('/api/users/:_id/exercises', async (req, res) => {
-  let date = (req.body.date == '') ? new Date().toDateString() : new Date(req.body.date).toDateString();
+  let date = (req.body.date == '') ? new Date().toISOString().substring(0, 10) : new Date(req.body.date).toDateString();
 
   await User.findOneAndUpdate(
     { _id: req.params._id },
@@ -100,7 +100,9 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     {
       $project: {
         "username": 1,
-        "log": 1,
+        "log.description": 1,
+        "log.date": 1,
+        "log.duration": 1
       }
     }
   ]);
@@ -125,7 +127,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   }
 
   result[0].count = result[0].log.length;
-
+  console.log(typeof result[0].log[0].date)
   res.send(result[0]);
 });
 
