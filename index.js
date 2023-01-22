@@ -37,9 +37,9 @@ let userSchema = mongoose.Schema({
 let User = mongoose.model('User', userSchema);
 
 app.get('/test', async (req, res) => {
-let date = new Date().toDateString()
-res.send(date)
+  res.send('aloha');
 });
+
 
 app.post('/api/users', async (req, res) => {
   try {
@@ -65,18 +65,16 @@ app.get('/api/users', async (req, res) => {
 });
 
 app.post('/api/users/:_id/exercises', async (req, res) => {
-  let date = (req.body.date == '')? new Date().toDateString() : new Date(req.body.date).toDateString();
+  let date = (req.body.date == '') ? new Date().toDateString() : new Date(req.body.date).toDateString();
 
   await User.findOneAndUpdate(
     { _id: req.params._id },
     {
       $push: {
         log: {
-          $each: [{
             description: req.body.description,
             duration: req.body.duration,
             date: date
-          }]
         }
       }
     },
@@ -88,7 +86,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       $project: {
         username: "$username",
         description: { $arrayElemAt: ["$log.description", -1] },
-        date: { $arrayElemAt: ["$log.date", -1] },
+        date: date,
         duration: { $arrayElemAt: ["$log.duration", -1] }
       }
     },
@@ -98,23 +96,41 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
 app.get('/api/users/:_id/logs', async (req, res) => {
   let result = await User.aggregate([
-    {$match: {_id: mongoose.Types.ObjectId(`${req.params._id}`)}},
-    {$project: {
-      'username': 1,
-      'log.description': 1,
-      'log.duration': 1,
-      'log.date': 1
-    }},
-    {$addFields: {
-      count: {$size: "$log"}
-    }}
+    { $match: { _id: mongoose.Types.ObjectId(`${req.params._id}`) } },
+    {
+      $project: {
+        "username": 1,
+        "log": 1,
+      }
+    }
   ]);
-  res.json(result[0]);
+
+  if (req.query.from || req.query.to) {
+    let dateFrom = new Date(0);
+    let dateTo = new Date();
+
+    if(req.query.from) {
+      dateFrom = new Date(req.query.from);
+    }
+    if (req.query.to) {
+      dateTo = new Date(req.query.to);
+    }
+    //console.log(new Date(dateTo))
+    result[0].log = result[0].log.filter((entry) => {
+      return new Date(entry.date) >= dateFrom && new Date(entry.date)<= dateTo;
+    })
+  }
+
+  if (req.query.limit) {
+    result[0].log = result[0].log.slice(0, req.query.limit)
+  }
+
+  result[0].count = result[0].log.length;
+
+  res.send(result[0]);
 });
 
-app.get('/api/users/:_id/logs/whateverthefuck', (req, res) => {
-  res.send('WIP');
-});
+
 /*
 - You can add from, to and limit parameters to a GET /api/users/:_id/logs request to retrieve part of the log of any user. from and to are dates in yyyy-mm-dd format. limit is an integer of how many logs to send back.
 */
