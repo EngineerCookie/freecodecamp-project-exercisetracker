@@ -65,7 +65,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 app.post('/api/users/:_id/exercises', async (req, res) => {
-  let date = (req.body.date == '') ? new Date().toISOString().substring(0, 10) : new Date(req.body.date).toDateString();
+  let date = (req.body.date === '' || req.body.date === undefined) ? new Date().toDateString() : new Date(req.body.date).toDateString();
 
   await User.findOneAndUpdate(
     { _id: req.params._id },
