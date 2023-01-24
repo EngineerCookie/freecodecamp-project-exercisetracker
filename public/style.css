@@ -1,59 +1,108 @@
-* {
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap');
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+:root {
+  font-size: 18px;
+  /*########
+  VARIABLES
+  ##########*/
+  /*Color*/
+  /*color-main black*/
+  --color-main-h: 0;
+  --color-main-s: 0%;
+  --color-main-l: 0%;
+  /*color-bg lime*/
+  --color-bg-h: 162;
+  --color-bg-s: 100%;
+  --color-bg-l: 50%;
+  /*FONT*/
+  --ff: 'Red Hat Display', sans-serif;
+  --fs-l: 2rem;
+  --fs-m: 1.4rem;
+  --fs-s: 1rem;
+}
+
 body {
-  font-family:sans-serif;
-  margin: 25px;
-  color: #222;
-  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ff);
+  height: 100vh;
+  margin: 0;
+  color: hsl(var(--color-main-h), var(--color-main-s), var(--color-main-l));
+  background-color: hsl(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l));
 }
 
-h1 {
-  font-weight: bold;
-  
+.container {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-p {
-  max-width: 900px;
+.container > h1 {
+  font-size: var(--fs-l);
 }
 
 form {
+  --color-bg-l: 35%;
+  text-align: center;
   margin-bottom: 25px;
   padding: 15px;
-  background-color: #87D37C;
+  background-color: hsl(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l));
   display: inline-block;
   width: 100%;
   max-width: 340px;
-  border-radius: 5px;
+  border-radius: 10px;
+  font-size: var(--fs-m)
+}
+
+form > h3 {
+  margin: 0.5rem auto;
 }
 
 input {
+  --color-bg-l: 50%;
   display: block;
   margin-bottom: 10px;
   padding: 5px;
   width: 100%;
-  border: 1px solid lightgrey;
+  border: 1px solid transparent;
   border-radius: 3px;
-  font-size: 16px;
+  font-size: var(--fs-s);
+  border-radius: 10px;
+  background-color: hsl(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l));
 }
 
+
 input[type=submit] {
-  font-size: 16px;
-  border-radius: 3px;
-  background-color: #E4F1FE;
-  border: 1px solid grey;
-  box-shadow: 2px 2px #999;
+  font-size: var(--fs-s);
+  border-radius: 25px;
+  background-color: transparent;
+  border: 1px solid hsl(var(--color-main-h), var(--color-main-s), var(--color-main-l));
   cursor: pointer;
 }
 
 input[type=submit]:hover {
-  background-color: #FFFEC4;
+  background-color: hsl(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l));
 }
 
-code {
-  font-family: monospace;
-  font-size: 1.2em;
-  background-color: #FFFEC4;
-  padding: 2px;
+.attribution {
+  margin: 0;
+}
+
+.attribution > a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.attribution > a :visited {
+  color: inherit;
 }
